@@ -86,3 +86,7 @@ D:\Study\Nam3_Ky2\ProgrammingAPI\BTL\WebBanQA\WebBanQA\obj\Debug\WebBanQA.csproj
 D:\Study\Nam3_Ky2\ProgrammingAPI\BTL\WebBanQA\WebBanQA\obj\Debug\WebBanQA.csproj.CopyComplete
 D:\Study\Nam3_Ky2\ProgrammingAPI\BTL\WebBanQA\WebBanQA\obj\Debug\WebBanQA.dll
 D:\Study\Nam3_Ky2\ProgrammingAPI\BTL\WebBanQA\WebBanQA\obj\Debug\WebBanQA.pdb
+D:\Study\Nam3_Ky2\ProgrammingAPI\BTL\WebBanQA\WebBanQA\bin\EntityFramework.dll
+D:\Study\Nam3_Ky2\ProgrammingAPI\BTL\WebBanQA\WebBanQA\bin\EntityFramework.SqlServer.dll
+D:\Study\Nam3_Ky2\ProgrammingAPI\BTL\WebBanQA\WebBanQA\bin\EntityFramework.xml
+D:\Study\Nam3_Ky2\ProgrammingAPI\BTL\WebBanQA\WebBanQA\bin\EntityFramework.SqlServer.xml

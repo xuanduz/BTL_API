@@ -45,6 +45,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -53,6 +59,7 @@
     <Reference Include="System.Net.Http.Formatting, Version=5.2.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.8\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.Cors, Version=5.2.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.8\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
@@ -136,15 +143,37 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Class\ColorModel.cs" />
+    <Compile Include="Models\Class\SizeModel.cs" />
+    <Compile Include="Models\DBColor.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBColor.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Models\DBProduct.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DBProduct.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\DBSize.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBSize.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DBStyle.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBStyle.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Models\DBUser.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DBUser.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MultiTable\DBDetailProduct.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBDetailProduct.dbml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -164,21 +193,53 @@
     <Folder Include="Views\Product\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Models\DBProduct.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>DBProduct.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
-    <None Include="Models\DBProduct.dbml.layout">
-      <DependentUpon>DBProduct.dbml</DependentUpon>
-    </None>
     <Content Include="Models\DBUser.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>DBUser.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Models\DBProduct.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DBProduct.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Models\DBColor.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DBColor.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Models\DBColor.dbml.layout">
+      <DependentUpon>DBColor.dbml</DependentUpon>
+    </None>
+    <None Include="Models\DBProduct.dbml.layout">
+      <DependentUpon>DBProduct.dbml</DependentUpon>
+    </None>
+    <Content Include="Models\DBStyle.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DBStyle.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Models\DBSize.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DBSize.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Models\DBSize.dbml.layout">
+      <DependentUpon>DBSize.dbml</DependentUpon>
+    </None>
+    <None Include="Models\DBStyle.dbml.layout">
+      <DependentUpon>DBStyle.dbml</DependentUpon>
+    </None>
     <None Include="Models\DBUser.dbml.layout">
       <DependentUpon>DBUser.dbml</DependentUpon>
+    </None>
+    <Content Include="Models\MultiTable\DBDetailProduct.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DBDetailProduct.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Models\MultiTable\DBDetailProduct.dbml.layout">
+      <DependentUpon>DBDetailProduct.dbml</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
