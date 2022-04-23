@@ -34,6 +34,38 @@ namespace WebBanQA.Controllers
         }
 
         [HttpGet]
+        [Route("api/getProductByStyle/{style}")]
+        public List<ListProduct> GetListProductByStyle(string style)
+        {
+            DBDetailProductDataContext db = new DBDetailProductDataContext();
+            var res = from pr in db.Products
+                      join ca in db.catalogs
+                      on pr.P_CAID equals ca.CA_id
+                      join st in db.styles
+                      on ca.CA_STID equals st.ST_id
+
+                      where st.ST_slug == style
+                      select new ListProduct()
+                      {
+                          ST_slug = st.ST_slug,
+                          CA_name = ca.CA_name,
+                          P_id = pr.P_id,
+                          P_name = pr.P_name,
+                          P_discount = pr.P_discount,
+                          P_price = pr.P_Price,
+                          P_image = pr.P_image,
+                          P_note = pr.P_note,
+                          P_amount = pr.P_amount,
+                          P_content = pr.P_content,
+                          P_CAID = pr.P_CAID,
+                          P_slug = pr.P_slug,
+                          P_color = (List<ColorModel>)GetColorByProdut(pr.P_id),
+                          P_size = (List<SizeModel>)GetSizeByProdut(pr.P_id)
+                      };
+            return res.ToList();
+        }
+
+        [HttpGet]
         [Route("api/getStyle")]
         public IEnumerable<style> GetStyle()
         {
@@ -42,11 +74,69 @@ namespace WebBanQA.Controllers
         }
 
         [HttpGet]
-        [Route("api/getColor")]
-        public IEnumerable<ColorModel> GetColor()
+        [Route("api/getCatalog/{style}")]
+        public IEnumerable<CatalogModel> getCatalog(string style)
         {
-            DBColorDataContext db = new DBColorDataContext();
+            DBDetailProductDataContext db = new DBDetailProductDataContext();
+            var res = from ca in db.catalogs
+                      join st in db.styles
+                      on ca.CA_STID equals st.ST_id
+                      where st.ST_slug == style
+                      group ca by new { ca.CA_name } into temp
+                      select new CatalogModel()
+                      {
+                          CA_name = temp.Key.CA_name
+                      };
+            return res.ToList();
+        }
+
+        public List<ColorModel> GetColorByProdut(string P_id)
+        {
+            DBDetailProductDataContext db = new DBDetailProductDataContext();
             var res = from co in db.Colors
+                      join pr in db.Products
+                      on co.COL_PID equals pr.P_id
+                      where pr.P_id == P_id
+
+                      group co by new { co.COL_slug, co.COL_name } into temp
+                      select new ColorModel()
+                      {
+                          COL_slug = temp.Key.COL_slug,
+                          COL_name = temp.Key.COL_name
+                      };
+            return res.ToList();
+        }
+
+        public List<SizeModel> GetSizeByProdut(string P_id)
+        {
+            DBDetailProductDataContext db = new DBDetailProductDataContext();
+            var res = from si in db.Sizes
+                      join pr in db.Products
+                      on si.S_PID equals pr.P_id
+                      where pr.P_id == P_id
+
+                      group si by new { si.S_name } into temp
+                      select new SizeModel()
+                      {
+                          S_name = temp.Key.S_name
+                      };
+            return res.ToList();
+        }
+
+        [HttpGet]
+        [Route("api/getColor/{style}")]
+        public IEnumerable<ColorModel> GetColor(string style)
+        {
+            DBDetailProductDataContext db = new DBDetailProductDataContext();
+            var res = from co in db.Colors
+                      join pr in db.Products
+                      on co.COL_PID equals pr.P_id
+                      join ca in db.catalogs
+                      on pr.P_CAID equals ca.CA_id
+                      join st in db.styles
+                      on ca.CA_STID equals st.ST_id
+
+                      where st.ST_slug == style
                       group co by new { co.COL_slug, co.COL_name } into temp
                       select new ColorModel()
                       {
@@ -57,12 +147,20 @@ namespace WebBanQA.Controllers
         }
 
         [HttpGet]
-        [Route("api/getSize")]
-        public IEnumerable<SizeModel> GetSize()
+        [Route("api/getSize/{style}")]
+        public IEnumerable<SizeModel> GetSize(string style)
         {
-            DBSizeDataContext db = new DBSizeDataContext();
-            var res = from co in db.Sizes
-                      group co by co.S_name into temp
+            DBDetailProductDataContext db = new DBDetailProductDataContext();
+            var res = from si in db.Sizes
+                      join pr in db.Products
+                      on si.S_PID equals pr.P_id
+                      join ca in db.catalogs
+                      on pr.P_CAID equals ca.CA_id
+                      join st in db.styles
+                      on ca.CA_STID equals st.ST_id
+
+                      where st.ST_slug == style
+                      group si by si.S_name into temp
                       select new SizeModel()
                       {
                           S_name = temp.Key

@@ -33,12 +33,18 @@ namespace WebBanQA.Models.MultiTable
     partial void InsertProduct(Product instance);
     partial void UpdateProduct(Product instance);
     partial void DeleteProduct(Product instance);
-    partial void InsertSize(Size instance);
-    partial void UpdateSize(Size instance);
-    partial void DeleteSize(Size instance);
     partial void InsertColor(Color instance);
     partial void UpdateColor(Color instance);
     partial void DeleteColor(Color instance);
+    partial void Insertcatalog(catalog instance);
+    partial void Updatecatalog(catalog instance);
+    partial void Deletecatalog(catalog instance);
+    partial void Insertstyle(style instance);
+    partial void Updatestyle(style instance);
+    partial void Deletestyle(style instance);
+    partial void InsertSize(Size instance);
+    partial void UpdateSize(Size instance);
+    partial void DeleteSize(Size instance);
     #endregion
 		
 		public DBDetailProductDataContext() : 
@@ -79,19 +85,35 @@ namespace WebBanQA.Models.MultiTable
 			}
 		}
 		
-		public System.Data.Linq.Table<Size> Sizes
-		{
-			get
-			{
-				return this.GetTable<Size>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Color> Colors
 		{
 			get
 			{
 				return this.GetTable<Color>();
+			}
+		}
+		
+		public System.Data.Linq.Table<catalog> catalogs
+		{
+			get
+			{
+				return this.GetTable<catalog>();
+			}
+		}
+		
+		public System.Data.Linq.Table<style> styles
+		{
+			get
+			{
+				return this.GetTable<style>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Size> Sizes
+		{
+			get
+			{
+				return this.GetTable<Size>();
 			}
 		}
 	}
@@ -122,9 +144,11 @@ namespace WebBanQA.Models.MultiTable
 		
 		private string _P_slug;
 		
+		private EntitySet<Color> _Colors;
+		
 		private EntitySet<Size> _Sizes;
 		
-		private EntitySet<Color> _Colors;
+		private EntityRef<catalog> _catalog;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -154,8 +178,9 @@ namespace WebBanQA.Models.MultiTable
 		
 		public Product()
 		{
-			this._Sizes = new EntitySet<Size>(new Action<Size>(this.attach_Sizes), new Action<Size>(this.detach_Sizes));
 			this._Colors = new EntitySet<Color>(new Action<Color>(this.attach_Colors), new Action<Color>(this.detach_Colors));
+			this._Sizes = new EntitySet<Size>(new Action<Size>(this.attach_Sizes), new Action<Size>(this.detach_Sizes));
+			this._catalog = default(EntityRef<catalog>);
 			OnCreated();
 		}
 		
@@ -330,6 +355,10 @@ namespace WebBanQA.Models.MultiTable
 			{
 				if ((this._P_CAID != value))
 				{
+					if (this._catalog.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnP_CAIDChanging(value);
 					this.SendPropertyChanging();
 					this._P_CAID = value;
@@ -359,19 +388,6 @@ namespace WebBanQA.Models.MultiTable
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Product_Size", Storage="_Sizes", ThisKey="P_id", OtherKey="S_PID")]
-		public EntitySet<Size> Sizes
-		{
-			get
-			{
-				return this._Sizes;
-			}
-			set
-			{
-				this._Sizes.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Product_Color", Storage="_Colors", ThisKey="P_id", OtherKey="COL_PID")]
 		public EntitySet<Color> Colors
 		{
@@ -385,6 +401,53 @@ namespace WebBanQA.Models.MultiTable
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Product_Size", Storage="_Sizes", ThisKey="P_id", OtherKey="S_PID")]
+		public EntitySet<Size> Sizes
+		{
+			get
+			{
+				return this._Sizes;
+			}
+			set
+			{
+				this._Sizes.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="catalog_Product", Storage="_catalog", ThisKey="P_CAID", OtherKey="CA_id", IsForeignKey=true)]
+		public catalog catalog
+		{
+			get
+			{
+				return this._catalog.Entity;
+			}
+			set
+			{
+				catalog previousValue = this._catalog.Entity;
+				if (((previousValue != value) 
+							|| (this._catalog.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._catalog.Entity = null;
+						previousValue.Products.Remove(this);
+					}
+					this._catalog.Entity = value;
+					if ((value != null))
+					{
+						value.Products.Add(this);
+						this._P_CAID = value.CA_id;
+					}
+					else
+					{
+						this._P_CAID = default(string);
+					}
+					this.SendPropertyChanged("catalog");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -403,18 +466,6 @@ namespace WebBanQA.Models.MultiTable
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_Sizes(Size entity)
-		{
-			this.SendPropertyChanging();
-			entity.Product = this;
-		}
-		
-		private void detach_Sizes(Size entity)
-		{
-			this.SendPropertyChanging();
-			entity.Product = null;
 		}
 		
 		private void attach_Colors(Color entity)
@@ -428,156 +479,17 @@ namespace WebBanQA.Models.MultiTable
 			this.SendPropertyChanging();
 			entity.Product = null;
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Size")]
-	public partial class Size : INotifyPropertyChanging, INotifyPropertyChanged
-	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private string _S_id;
-		
-		private string _S_name;
-		
-		private string _S_PID;
-		
-		private EntityRef<Product> _Product;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnS_idChanging(string value);
-    partial void OnS_idChanged();
-    partial void OnS_nameChanging(string value);
-    partial void OnS_nameChanged();
-    partial void OnS_PIDChanging(string value);
-    partial void OnS_PIDChanged();
-    #endregion
-		
-		public Size()
+		private void attach_Sizes(Size entity)
 		{
-			this._Product = default(EntityRef<Product>);
-			OnCreated();
+			this.SendPropertyChanging();
+			entity.Product = this;
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_S_id", DbType="VarChar(10) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-		public string S_id
+		private void detach_Sizes(Size entity)
 		{
-			get
-			{
-				return this._S_id;
-			}
-			set
-			{
-				if ((this._S_id != value))
-				{
-					this.OnS_idChanging(value);
-					this.SendPropertyChanging();
-					this._S_id = value;
-					this.SendPropertyChanged("S_id");
-					this.OnS_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_S_name", DbType="NVarChar(200)")]
-		public string S_name
-		{
-			get
-			{
-				return this._S_name;
-			}
-			set
-			{
-				if ((this._S_name != value))
-				{
-					this.OnS_nameChanging(value);
-					this.SendPropertyChanging();
-					this._S_name = value;
-					this.SendPropertyChanged("S_name");
-					this.OnS_nameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_S_PID", DbType="VarChar(10)")]
-		public string S_PID
-		{
-			get
-			{
-				return this._S_PID;
-			}
-			set
-			{
-				if ((this._S_PID != value))
-				{
-					if (this._Product.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnS_PIDChanging(value);
-					this.SendPropertyChanging();
-					this._S_PID = value;
-					this.SendPropertyChanged("S_PID");
-					this.OnS_PIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Product_Size", Storage="_Product", ThisKey="S_PID", OtherKey="P_id", IsForeignKey=true)]
-		public Product Product
-		{
-			get
-			{
-				return this._Product.Entity;
-			}
-			set
-			{
-				Product previousValue = this._Product.Entity;
-				if (((previousValue != value) 
-							|| (this._Product.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Product.Entity = null;
-						previousValue.Sizes.Remove(this);
-					}
-					this._Product.Entity = value;
-					if ((value != null))
-					{
-						value.Sizes.Add(this);
-						this._S_PID = value.P_id;
-					}
-					else
-					{
-						this._S_PID = default(string);
-					}
-					this.SendPropertyChanged("Product");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
+			this.SendPropertyChanging();
+			entity.Product = null;
 		}
 	}
 	
@@ -729,6 +641,474 @@ namespace WebBanQA.Models.MultiTable
 					else
 					{
 						this._COL_PID = default(string);
+					}
+					this.SendPropertyChanged("Product");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.catalog")]
+	public partial class catalog : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _CA_id;
+		
+		private string _CA_name;
+		
+		private string _CA_STID;
+		
+		private EntitySet<Product> _Products;
+		
+		private EntityRef<style> _style;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnCA_idChanging(string value);
+    partial void OnCA_idChanged();
+    partial void OnCA_nameChanging(string value);
+    partial void OnCA_nameChanged();
+    partial void OnCA_STIDChanging(string value);
+    partial void OnCA_STIDChanged();
+    #endregion
+		
+		public catalog()
+		{
+			this._Products = new EntitySet<Product>(new Action<Product>(this.attach_Products), new Action<Product>(this.detach_Products));
+			this._style = default(EntityRef<style>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CA_id", DbType="VarChar(10) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string CA_id
+		{
+			get
+			{
+				return this._CA_id;
+			}
+			set
+			{
+				if ((this._CA_id != value))
+				{
+					this.OnCA_idChanging(value);
+					this.SendPropertyChanging();
+					this._CA_id = value;
+					this.SendPropertyChanged("CA_id");
+					this.OnCA_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CA_name", DbType="NVarChar(200)")]
+		public string CA_name
+		{
+			get
+			{
+				return this._CA_name;
+			}
+			set
+			{
+				if ((this._CA_name != value))
+				{
+					this.OnCA_nameChanging(value);
+					this.SendPropertyChanging();
+					this._CA_name = value;
+					this.SendPropertyChanged("CA_name");
+					this.OnCA_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CA_STID", DbType="VarChar(10)")]
+		public string CA_STID
+		{
+			get
+			{
+				return this._CA_STID;
+			}
+			set
+			{
+				if ((this._CA_STID != value))
+				{
+					if (this._style.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCA_STIDChanging(value);
+					this.SendPropertyChanging();
+					this._CA_STID = value;
+					this.SendPropertyChanged("CA_STID");
+					this.OnCA_STIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="catalog_Product", Storage="_Products", ThisKey="CA_id", OtherKey="P_CAID")]
+		public EntitySet<Product> Products
+		{
+			get
+			{
+				return this._Products;
+			}
+			set
+			{
+				this._Products.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="style_catalog", Storage="_style", ThisKey="CA_STID", OtherKey="ST_id", IsForeignKey=true)]
+		public style style
+		{
+			get
+			{
+				return this._style.Entity;
+			}
+			set
+			{
+				style previousValue = this._style.Entity;
+				if (((previousValue != value) 
+							|| (this._style.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._style.Entity = null;
+						previousValue.catalogs.Remove(this);
+					}
+					this._style.Entity = value;
+					if ((value != null))
+					{
+						value.catalogs.Add(this);
+						this._CA_STID = value.ST_id;
+					}
+					else
+					{
+						this._CA_STID = default(string);
+					}
+					this.SendPropertyChanged("style");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Products(Product entity)
+		{
+			this.SendPropertyChanging();
+			entity.catalog = this;
+		}
+		
+		private void detach_Products(Product entity)
+		{
+			this.SendPropertyChanging();
+			entity.catalog = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.style")]
+	public partial class style : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _ST_id;
+		
+		private string _ST_name;
+		
+		private string _ST_slug;
+		
+		private EntitySet<catalog> _catalogs;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnST_idChanging(string value);
+    partial void OnST_idChanged();
+    partial void OnST_nameChanging(string value);
+    partial void OnST_nameChanged();
+    partial void OnST_slugChanging(string value);
+    partial void OnST_slugChanged();
+    #endregion
+		
+		public style()
+		{
+			this._catalogs = new EntitySet<catalog>(new Action<catalog>(this.attach_catalogs), new Action<catalog>(this.detach_catalogs));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ST_id", DbType="VarChar(10) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string ST_id
+		{
+			get
+			{
+				return this._ST_id;
+			}
+			set
+			{
+				if ((this._ST_id != value))
+				{
+					this.OnST_idChanging(value);
+					this.SendPropertyChanging();
+					this._ST_id = value;
+					this.SendPropertyChanged("ST_id");
+					this.OnST_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ST_name", DbType="NVarChar(200)")]
+		public string ST_name
+		{
+			get
+			{
+				return this._ST_name;
+			}
+			set
+			{
+				if ((this._ST_name != value))
+				{
+					this.OnST_nameChanging(value);
+					this.SendPropertyChanging();
+					this._ST_name = value;
+					this.SendPropertyChanged("ST_name");
+					this.OnST_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ST_slug", DbType="NVarChar(200)")]
+		public string ST_slug
+		{
+			get
+			{
+				return this._ST_slug;
+			}
+			set
+			{
+				if ((this._ST_slug != value))
+				{
+					this.OnST_slugChanging(value);
+					this.SendPropertyChanging();
+					this._ST_slug = value;
+					this.SendPropertyChanged("ST_slug");
+					this.OnST_slugChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="style_catalog", Storage="_catalogs", ThisKey="ST_id", OtherKey="CA_STID")]
+		public EntitySet<catalog> catalogs
+		{
+			get
+			{
+				return this._catalogs;
+			}
+			set
+			{
+				this._catalogs.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_catalogs(catalog entity)
+		{
+			this.SendPropertyChanging();
+			entity.style = this;
+		}
+		
+		private void detach_catalogs(catalog entity)
+		{
+			this.SendPropertyChanging();
+			entity.style = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Size")]
+	public partial class Size : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _S_id;
+		
+		private string _S_name;
+		
+		private string _S_PID;
+		
+		private EntityRef<Product> _Product;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnS_idChanging(string value);
+    partial void OnS_idChanged();
+    partial void OnS_nameChanging(string value);
+    partial void OnS_nameChanged();
+    partial void OnS_PIDChanging(string value);
+    partial void OnS_PIDChanged();
+    #endregion
+		
+		public Size()
+		{
+			this._Product = default(EntityRef<Product>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_S_id", DbType="VarChar(10) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string S_id
+		{
+			get
+			{
+				return this._S_id;
+			}
+			set
+			{
+				if ((this._S_id != value))
+				{
+					this.OnS_idChanging(value);
+					this.SendPropertyChanging();
+					this._S_id = value;
+					this.SendPropertyChanged("S_id");
+					this.OnS_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_S_name", DbType="NVarChar(200)")]
+		public string S_name
+		{
+			get
+			{
+				return this._S_name;
+			}
+			set
+			{
+				if ((this._S_name != value))
+				{
+					this.OnS_nameChanging(value);
+					this.SendPropertyChanging();
+					this._S_name = value;
+					this.SendPropertyChanged("S_name");
+					this.OnS_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_S_PID", DbType="VarChar(10)")]
+		public string S_PID
+		{
+			get
+			{
+				return this._S_PID;
+			}
+			set
+			{
+				if ((this._S_PID != value))
+				{
+					if (this._Product.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnS_PIDChanging(value);
+					this.SendPropertyChanging();
+					this._S_PID = value;
+					this.SendPropertyChanged("S_PID");
+					this.OnS_PIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Product_Size", Storage="_Product", ThisKey="S_PID", OtherKey="P_id", IsForeignKey=true)]
+		public Product Product
+		{
+			get
+			{
+				return this._Product.Entity;
+			}
+			set
+			{
+				Product previousValue = this._Product.Entity;
+				if (((previousValue != value) 
+							|| (this._Product.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Product.Entity = null;
+						previousValue.Sizes.Remove(this);
+					}
+					this._Product.Entity = value;
+					if ((value != null))
+					{
+						value.Sizes.Add(this);
+						this._S_PID = value.P_id;
+					}
+					else
+					{
+						this._S_PID = default(string);
 					}
 					this.SendPropertyChanged("Product");
 				}

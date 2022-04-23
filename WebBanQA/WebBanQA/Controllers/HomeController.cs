@@ -23,15 +23,6 @@ namespace WebBanQA.Controllers
             return db.Products.OrderByDescending(x => x.P_discount).Take(number).ToList();
         }
 
-        //[HttpGet]
-        //[Route("api/home/randomProduct/{number}")]
-        //public IEnumerable<Product> GetRandomProduct(int number)
-        //{
-        //    DBProductDataContext db = new DBProductDataContext();
-        //    //var res = db.Products.OrderBy(x => x.P_discount).Take(4).ToList();
-        //    return db.Products.OrderBy(x => Guid.NewGuid()).Take(number).ToList();
-        //}
-
         [HttpGet]
         [Route("api/login/{username}/{password}")]
         public bool Login(string username, string password)

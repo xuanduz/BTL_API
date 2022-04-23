@@ -138,27 +138,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Class\ColorModel.cs" />
-    <Compile Include="Models\Class\SizeModel.cs" />
-    <Compile Include="Models\DBColor.designer.cs">
+    <Compile Include="Models\Cart\DBCart.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DBColor.dbml</DependentUpon>
+      <DependentUpon>DBCart.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Class\CartDetailModel.cs" />
+    <Compile Include="Models\Class\CartModel.cs" />
+    <Compile Include="Models\Class\CatalogModel.cs" />
+    <Compile Include="Models\Class\ColorModel.cs" />
+    <Compile Include="Models\Class\ListProduct.cs" />
+    <Compile Include="Models\Class\SizeModel.cs" />
     <Compile Include="Models\DBProduct.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DBProduct.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DBSize.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DBSize.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\DBStyle.designer.cs">
       <AutoGen>True</AutoGen>
@@ -190,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Cart\" />
     <Folder Include="Views\Product\" />
   </ItemGroup>
   <ItemGroup>
@@ -203,13 +204,13 @@
       <LastGenOutput>DBProduct.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Models\DBColor.dbml">
+    <Content Include="Models\Cart\DBCart.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>DBColor.designer.cs</LastGenOutput>
+      <LastGenOutput>DBCart.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Models\DBColor.dbml.layout">
-      <DependentUpon>DBColor.dbml</DependentUpon>
+    <None Include="Models\Cart\DBCart.dbml.layout">
+      <DependentUpon>DBCart.dbml</DependentUpon>
     </None>
     <None Include="Models\DBProduct.dbml.layout">
       <DependentUpon>DBProduct.dbml</DependentUpon>
@@ -219,14 +220,6 @@
       <LastGenOutput>DBStyle.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Models\DBSize.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>DBSize.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
-    <None Include="Models\DBSize.dbml.layout">
-      <DependentUpon>DBSize.dbml</DependentUpon>
-    </None>
     <None Include="Models\DBStyle.dbml.layout">
       <DependentUpon>DBStyle.dbml</DependentUpon>
     </None>
