@@ -11,7 +11,8 @@ namespace WebBanQA.Controllers
 {
     public class CartController : ApiController
     {
-        [EnableCors("*", "*", "*")]
+        //[EnableCors("*", "*", "*")]
+        //[EnableCorsAttribute("*", "*", "*")]
         // GET: Cart
         [HttpGet]
         [Route("api/getCartByUser/{userName}")]
@@ -50,7 +51,7 @@ namespace WebBanQA.Controllers
                       {
                           CD_PID = cd.CD_PID,
                           CD_S_name = cd.CD_S_name,
-                          CD_COLname = cd.CD_COLname,
+                          CD_COLslug = cd.CD_COLslug,
                           CD_amount = cd.CD_amount,
                           P_name = pr.P_name,
                           P_discount = pr.P_discount,
@@ -63,7 +64,7 @@ namespace WebBanQA.Controllers
 
         [HttpPost]
         [Route("api/cart")]
-        public bool InsertItemToCart(string CD_PID, string username, string CD_COLname, string CD_S_name, int CD_amount)
+        public bool InsertItemAddToCart(string CD_PID, string username, string CD_COLslug, string CD_S_name, int CD_amount)
         {
             try
             {
@@ -72,10 +73,58 @@ namespace WebBanQA.Controllers
                 cartdeta.CD_id = "";
                 cartdeta.CD_PID = CD_PID;
                 cartdeta.CD_CarID = GetCartID(username);
-                cartdeta.CD_COLname = CD_COLname;
+                cartdeta.CD_COLslug = CD_COLslug;
                 cartdeta.CD_S_name = CD_S_name;
                 cartdeta.CD_amount = CD_amount;
                 db.Cartdetas.InsertOnSubmit(cartdeta);
+                db.SubmitChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        [HttpPost]
+        [Route("api/cart/update/")]
+        public bool UpdateItemAddToCart(string CD_PID, string username, string CD_COLslug, string CD_S_name, int amount)
+        {
+            try
+            {
+                DBCartDataContext db = new DBCartDataContext();
+                string CarID = GetCartID(username);
+                Cartdeta cartdeta = (from ca in db.Cartdetas
+                                     where ca.CD_PID == CD_PID
+                                     && ca.CD_CarID == CarID
+                                     && ca.CD_COLslug == CD_COLslug
+                                     && ca.CD_S_name == CD_S_name
+                                     select ca).SingleOrDefault();
+                cartdeta.CD_amount = amount;
+                db.SubmitChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        [HttpPost]
+        [Route("api/cart/delete/")]
+        public bool DeleteItemOnCart(string CD_PID, string username, string CD_COLslug, string CD_S_name)
+        {
+            try
+            {
+                DBCartDataContext db = new DBCartDataContext();
+                string CarID = GetCartID(username);
+                Cartdeta cartdetaForRemove = (from ca in db.Cartdetas
+                                     where ca.CD_PID == CD_PID
+                                     && ca.CD_CarID == CarID
+                                     && ca.CD_COLslug == CD_COLslug
+                                     && ca.CD_S_name == CD_S_name
+                                     select ca).SingleOrDefault();
+                db.Cartdetas.DeleteOnSubmit(cartdetaForRemove);
                 db.SubmitChanges();
                 return true;
             }

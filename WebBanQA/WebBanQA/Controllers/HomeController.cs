@@ -10,7 +10,8 @@ using WebBanQA.Models;
 namespace WebBanQA.Controllers
 {
     // khi them moi controller thi phai go cai dong nay
-    [EnableCors("*", "*", "*")]
+    //[EnableCors("*", "*", "*")]
+    //[EnableCorsAttribute("*", "*", "*")]
 
     public class HomeController : ApiController
     {

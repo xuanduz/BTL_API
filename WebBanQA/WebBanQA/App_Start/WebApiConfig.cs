@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace WebBanQA
 {
@@ -9,7 +10,6 @@ namespace WebBanQA
     {
         public static void Register(HttpConfiguration config)
         {
-            config.EnableCors();
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
@@ -17,6 +17,9 @@ namespace WebBanQA
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            //EnableCorsAttribute cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors();
         }
     }
 }

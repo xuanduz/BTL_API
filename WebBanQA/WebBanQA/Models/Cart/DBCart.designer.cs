@@ -346,7 +346,7 @@ namespace WebBanQA.Models.Cart
 		
 		private string _CD_CarID;
 		
-		private string _CD_COLname;
+		private string _CD_COLslug;
 		
 		private string _CD_S_name;
 		
@@ -366,8 +366,8 @@ namespace WebBanQA.Models.Cart
     partial void OnCD_PIDChanged();
     partial void OnCD_CarIDChanging(string value);
     partial void OnCD_CarIDChanged();
-    partial void OnCD_COLnameChanging(string value);
-    partial void OnCD_COLnameChanged();
+    partial void OnCD_COLslugChanging(string value);
+    partial void OnCD_COLslugChanged();
     partial void OnCD_S_nameChanging(string value);
     partial void OnCD_S_nameChanged();
     partial void OnCD_amountChanging(System.Nullable<int> value);
@@ -449,22 +449,22 @@ namespace WebBanQA.Models.Cart
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CD_COLname", DbType="NVarChar(20)")]
-		public string CD_COLname
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CD_COLslug", DbType="NVarChar(20)")]
+		public string CD_COLslug
 		{
 			get
 			{
-				return this._CD_COLname;
+				return this._CD_COLslug;
 			}
 			set
 			{
-				if ((this._CD_COLname != value))
+				if ((this._CD_COLslug != value))
 				{
-					this.OnCD_COLnameChanging(value);
+					this.OnCD_COLslugChanging(value);
 					this.SendPropertyChanging();
-					this._CD_COLname = value;
-					this.SendPropertyChanged("CD_COLname");
-					this.OnCD_COLnameChanged();
+					this._CD_COLslug = value;
+					this.SendPropertyChanged("CD_COLslug");
+					this.OnCD_COLslugChanged();
 				}
 			}
 		}

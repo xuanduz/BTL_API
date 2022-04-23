@@ -16,7 +16,7 @@
       <Column Name="CD_id" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="CD_PID" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
       <Column Name="CD_CarID" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
-      <Column Name="CD_COLname" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="CD_COLslug" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
       <Column Name="CD_S_name" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
       <Column Name="CD_amount" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Cart_Cartdeta" Member="Cart" ThisKey="CD_CarID" OtherKey="CAR_id" Type="Cart" IsForeignKey="true" />

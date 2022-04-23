@@ -11,7 +11,8 @@ using style = WebBanQA.Models.style;
 
 namespace WebBanQA.Controllers
 {
-    [EnableCors("*", "*", "*")]
+    //[EnableCors("*", "*", "*")]
+    //[EnableCorsAttribute("*", "*", "*")]
     public class ProductController : ApiController
     {
         private IEnumerable<ColorModel> temp;
