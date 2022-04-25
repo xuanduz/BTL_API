@@ -6,6 +6,9 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Net;
 using WebBanQA.Models;
+using WebBanQA.Models.Class;
+using WebBanQA.Models.Cart;
+using User = WebBanQA.Models.User;
 
 namespace WebBanQA.Controllers
 {
@@ -18,7 +21,7 @@ namespace WebBanQA.Controllers
         //https://localhost:44314/api/home
         [HttpGet]
         [Route("api/home/topSaleProduct/{number}")]
-        public IEnumerable<Product> GetTopSaleProduct(int number)
+        public IEnumerable<Models.Product> GetTopSaleProduct(int number)
         {
             DBProductDataContext db = new DBProductDataContext();
             return db.Products.OrderByDescending(x => x.P_discount).Take(number).ToList();
@@ -38,7 +41,6 @@ namespace WebBanQA.Controllers
         }
         
         [HttpPost]
-        //[Route("api/register/{fname}/{lname}/{uname}/{password}/{email}/{phonenumber}/{address}")]
         [Route("api/register")]
         public string Register(string fname, string lname, string uname, string password, string email, string phonenumber, string address)
         {
@@ -46,6 +48,10 @@ namespace WebBanQA.Controllers
             {
                 DBUserDataContext db = new DBUserDataContext();
                 User user = new User();
+                //CartInsertModel cart = new CartInsertModel();
+                //DBCartDataContext dbCart = new DBCartDataContext();
+                //Cart cart = new Cart();
+
                 var checkUserName = db.Users.Where(x => x.U_name == uname).SingleOrDefault();
                 var checkEmail = db.Users.Where(x => x.U_email == email).SingleOrDefault();
 
@@ -59,6 +65,7 @@ namespace WebBanQA.Controllers
                     }
                     else
                     {
+                        // insert new user
                         user.U_id = "";
                         user.U_Fname = fname;
                         user.U_Lname = lname;
@@ -71,6 +78,16 @@ namespace WebBanQA.Controllers
                         user.U_pass = password;
                         db.Users.InsertOnSubmit(user);
                         db.SubmitChanges();
+                    
+                        // insert new cart
+                        //cart.CAR_id = "";
+                        //cart.CAR_UID = user.U_id;
+                        //cart.CAR_status = "true";
+                        //cart.CAR_select = "online";
+                        //cart.car_date = DateTime.Now;
+                        //dbCart.Carts.InsertOnSubmit(cart);
+                        //dbCart.SubmitChanges();
+
                         return "Success";
                     }
             }
@@ -79,5 +96,25 @@ namespace WebBanQA.Controllers
                 return "Fail";
             }
         } 
+
+        [HttpGet]
+        [Route("api/checkAccount")]
+        public string checkAccountExist(string username)
+        {
+            DBUserDataContext db = new DBUserDataContext();
+            var checkUserName = db.Users.Where(x => x.U_name == username).SingleOrDefault();
+            var checkEmail = db.Users.Where(x => x.U_email == username).SingleOrDefault();
+            if (checkUserName != null)
+            {
+                return checkUserName.U_name.ToString();
+            }else if (checkEmail != null)
+            {
+                return checkEmail.U_name.ToString();
+            }
+            else
+            {
+                return "NOT EXIST";
+            }
+        }
     }
 }

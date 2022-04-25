@@ -150,6 +150,7 @@
       <DependentUpon>DBCart.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\Class\CartDetailModel.cs" />
+    <Compile Include="Models\Class\CartInsertModel.cs" />
     <Compile Include="Models\Class\CartModel.cs" />
     <Compile Include="Models\Class\CatalogModel.cs" />
     <Compile Include="Models\Class\ColorModel.cs" />
