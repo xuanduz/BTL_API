@@ -31,7 +31,9 @@ namespace WebBanQA.Controllers
         public IEnumerable<Models.Product> GetRandomProduct(int number)
         {
             DBProductDataContext db = new DBProductDataContext();
-            return db.Products.OrderBy(x => Guid.NewGuid()).Take(number).ToList();
+            Random rand = new Random();
+            int toSkip = rand.Next(0, db.Products.Count());
+            return db.Products.Skip(toSkip).Take(number).ToList();
         }
 
         [HttpGet]

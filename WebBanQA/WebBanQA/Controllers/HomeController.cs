@@ -48,12 +48,10 @@ namespace WebBanQA.Controllers
             {
                 DBUserDataContext db = new DBUserDataContext();
                 User user = new User();
-                //CartInsertModel cart = new CartInsertModel();
-                //DBCartDataContext dbCart = new DBCartDataContext();
-                //Cart cart = new Cart();
 
                 var checkUserName = db.Users.Where(x => x.U_name == uname).SingleOrDefault();
                 var checkEmail = db.Users.Where(x => x.U_email == email).SingleOrDefault();
+                var checkPhoneNumber = db.Users.Where(x => x.U_contact == phonenumber).SingleOrDefault();
 
                 if(checkUserName != null)
                 {
@@ -63,6 +61,10 @@ namespace WebBanQA.Controllers
                     {
                         return "Email exist";
                     }
+                else if(checkPhoneNumber != null)
+                {
+                    return "Phone number exist";
+                }
                     else
                     {
                         // insert new user
@@ -78,15 +80,6 @@ namespace WebBanQA.Controllers
                         user.U_pass = password;
                         db.Users.InsertOnSubmit(user);
                         db.SubmitChanges();
-                    
-                        // insert new cart
-                        //cart.CAR_id = "";
-                        //cart.CAR_UID = user.U_id;
-                        //cart.CAR_status = "true";
-                        //cart.CAR_select = "online";
-                        //cart.car_date = DateTime.Now;
-                        //dbCart.Carts.InsertOnSubmit(cart);
-                        //dbCart.SubmitChanges();
 
                         return "Success";
                     }
@@ -95,7 +88,7 @@ namespace WebBanQA.Controllers
             {
                 return "Fail";
             }
-        } 
+        }
 
         [HttpGet]
         [Route("api/checkAccount")]

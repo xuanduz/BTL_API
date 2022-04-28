@@ -30,6 +30,9 @@ namespace WebBanQA.Models.Cart
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
+    partial void InsertUser(User instance);
+    partial void UpdateUser(User instance);
+    partial void DeleteUser(User instance);
     partial void InsertCart(Cart instance);
     partial void UpdateCart(Cart instance);
     partial void DeleteCart(Cart instance);
@@ -39,13 +42,10 @@ namespace WebBanQA.Models.Cart
     partial void InsertProduct(Product instance);
     partial void UpdateProduct(Product instance);
     partial void DeleteProduct(Product instance);
-    partial void InsertUser(User instance);
-    partial void UpdateUser(User instance);
-    partial void DeleteUser(User instance);
     #endregion
 		
 		public DBCartDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["QLCuaHangBanQAConnectionString1"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["QLCuaHangBanQAConnectionString2"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -74,6 +74,14 @@ namespace WebBanQA.Models.Cart
 			OnCreated();
 		}
 		
+		public System.Data.Linq.Table<User> Users
+		{
+			get
+			{
+				return this.GetTable<User>();
+			}
+		}
+		
 		public System.Data.Linq.Table<Cart> Carts
 		{
 			get
@@ -97,13 +105,311 @@ namespace WebBanQA.Models.Cart
 				return this.GetTable<Product>();
 			}
 		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Users")]
+	public partial class User : INotifyPropertyChanging, INotifyPropertyChanged
+	{
 		
-		public System.Data.Linq.Table<User> Users
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _U_id;
+		
+		private string _U_Fname;
+		
+		private string _U_Lname;
+		
+		private string _U_email;
+		
+		private string _U_status;
+		
+		private string _U_add;
+		
+		private string _U_name;
+		
+		private string _U_contact;
+		
+		private System.Nullable<System.DateTime> _U_created;
+		
+		private string _U_pass;
+		
+		private EntitySet<Cart> _Carts;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnU_idChanging(string value);
+    partial void OnU_idChanged();
+    partial void OnU_FnameChanging(string value);
+    partial void OnU_FnameChanged();
+    partial void OnU_LnameChanging(string value);
+    partial void OnU_LnameChanged();
+    partial void OnU_emailChanging(string value);
+    partial void OnU_emailChanged();
+    partial void OnU_statusChanging(string value);
+    partial void OnU_statusChanged();
+    partial void OnU_addChanging(string value);
+    partial void OnU_addChanged();
+    partial void OnU_nameChanging(string value);
+    partial void OnU_nameChanged();
+    partial void OnU_contactChanging(string value);
+    partial void OnU_contactChanged();
+    partial void OnU_createdChanging(System.Nullable<System.DateTime> value);
+    partial void OnU_createdChanged();
+    partial void OnU_passChanging(string value);
+    partial void OnU_passChanged();
+    #endregion
+		
+		public User()
+		{
+			this._Carts = new EntitySet<Cart>(new Action<Cart>(this.attach_Carts), new Action<Cart>(this.detach_Carts));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_id", DbType="VarChar(10) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string U_id
 		{
 			get
 			{
-				return this.GetTable<User>();
+				return this._U_id;
 			}
+			set
+			{
+				if ((this._U_id != value))
+				{
+					this.OnU_idChanging(value);
+					this.SendPropertyChanging();
+					this._U_id = value;
+					this.SendPropertyChanged("U_id");
+					this.OnU_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_Fname", DbType="NVarChar(200)")]
+		public string U_Fname
+		{
+			get
+			{
+				return this._U_Fname;
+			}
+			set
+			{
+				if ((this._U_Fname != value))
+				{
+					this.OnU_FnameChanging(value);
+					this.SendPropertyChanging();
+					this._U_Fname = value;
+					this.SendPropertyChanged("U_Fname");
+					this.OnU_FnameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_Lname", DbType="NVarChar(200)")]
+		public string U_Lname
+		{
+			get
+			{
+				return this._U_Lname;
+			}
+			set
+			{
+				if ((this._U_Lname != value))
+				{
+					this.OnU_LnameChanging(value);
+					this.SendPropertyChanging();
+					this._U_Lname = value;
+					this.SendPropertyChanged("U_Lname");
+					this.OnU_LnameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_email", DbType="NVarChar(200) NOT NULL", CanBeNull=false)]
+		public string U_email
+		{
+			get
+			{
+				return this._U_email;
+			}
+			set
+			{
+				if ((this._U_email != value))
+				{
+					this.OnU_emailChanging(value);
+					this.SendPropertyChanging();
+					this._U_email = value;
+					this.SendPropertyChanged("U_email");
+					this.OnU_emailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_status", DbType="NVarChar(10) NOT NULL", CanBeNull=false)]
+		public string U_status
+		{
+			get
+			{
+				return this._U_status;
+			}
+			set
+			{
+				if ((this._U_status != value))
+				{
+					this.OnU_statusChanging(value);
+					this.SendPropertyChanging();
+					this._U_status = value;
+					this.SendPropertyChanged("U_status");
+					this.OnU_statusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_add", DbType="NVarChar(200)")]
+		public string U_add
+		{
+			get
+			{
+				return this._U_add;
+			}
+			set
+			{
+				if ((this._U_add != value))
+				{
+					this.OnU_addChanging(value);
+					this.SendPropertyChanging();
+					this._U_add = value;
+					this.SendPropertyChanged("U_add");
+					this.OnU_addChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_name", DbType="NVarChar(200)")]
+		public string U_name
+		{
+			get
+			{
+				return this._U_name;
+			}
+			set
+			{
+				if ((this._U_name != value))
+				{
+					this.OnU_nameChanging(value);
+					this.SendPropertyChanging();
+					this._U_name = value;
+					this.SendPropertyChanged("U_name");
+					this.OnU_nameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_contact", DbType="NVarChar(15)")]
+		public string U_contact
+		{
+			get
+			{
+				return this._U_contact;
+			}
+			set
+			{
+				if ((this._U_contact != value))
+				{
+					this.OnU_contactChanging(value);
+					this.SendPropertyChanging();
+					this._U_contact = value;
+					this.SendPropertyChanged("U_contact");
+					this.OnU_contactChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_created", DbType="DateTime")]
+		public System.Nullable<System.DateTime> U_created
+		{
+			get
+			{
+				return this._U_created;
+			}
+			set
+			{
+				if ((this._U_created != value))
+				{
+					this.OnU_createdChanging(value);
+					this.SendPropertyChanging();
+					this._U_created = value;
+					this.SendPropertyChanged("U_created");
+					this.OnU_createdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_pass", DbType="NVarChar(200)")]
+		public string U_pass
+		{
+			get
+			{
+				return this._U_pass;
+			}
+			set
+			{
+				if ((this._U_pass != value))
+				{
+					this.OnU_passChanging(value);
+					this.SendPropertyChanging();
+					this._U_pass = value;
+					this.SendPropertyChanged("U_pass");
+					this.OnU_passChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Cart", Storage="_Carts", ThisKey="U_id", OtherKey="CAR_UID")]
+		public EntitySet<Cart> Carts
+		{
+			get
+			{
+				return this._Carts;
+			}
+			set
+			{
+				this._Carts.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Carts(Cart entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_Carts(Cart entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
 		}
 	}
 	
@@ -901,312 +1207,6 @@ namespace WebBanQA.Models.Cart
 		{
 			this.SendPropertyChanging();
 			entity.Product = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Users")]
-	public partial class User : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private string _U_id;
-		
-		private string _U_Fname;
-		
-		private string _U_Lname;
-		
-		private string _U_email;
-		
-		private string _U_status;
-		
-		private string _U_add;
-		
-		private string _U_name;
-		
-		private string _U_contact;
-		
-		private System.Nullable<System.DateTime> _U_created;
-		
-		private string _U_pass;
-		
-		private EntitySet<Cart> _Carts;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnU_idChanging(string value);
-    partial void OnU_idChanged();
-    partial void OnU_FnameChanging(string value);
-    partial void OnU_FnameChanged();
-    partial void OnU_LnameChanging(string value);
-    partial void OnU_LnameChanged();
-    partial void OnU_emailChanging(string value);
-    partial void OnU_emailChanged();
-    partial void OnU_statusChanging(string value);
-    partial void OnU_statusChanged();
-    partial void OnU_addChanging(string value);
-    partial void OnU_addChanged();
-    partial void OnU_nameChanging(string value);
-    partial void OnU_nameChanged();
-    partial void OnU_contactChanging(string value);
-    partial void OnU_contactChanged();
-    partial void OnU_createdChanging(System.Nullable<System.DateTime> value);
-    partial void OnU_createdChanged();
-    partial void OnU_passChanging(string value);
-    partial void OnU_passChanged();
-    #endregion
-		
-		public User()
-		{
-			this._Carts = new EntitySet<Cart>(new Action<Cart>(this.attach_Carts), new Action<Cart>(this.detach_Carts));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_id", DbType="VarChar(10) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-		public string U_id
-		{
-			get
-			{
-				return this._U_id;
-			}
-			set
-			{
-				if ((this._U_id != value))
-				{
-					this.OnU_idChanging(value);
-					this.SendPropertyChanging();
-					this._U_id = value;
-					this.SendPropertyChanged("U_id");
-					this.OnU_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_Fname", DbType="NVarChar(200)")]
-		public string U_Fname
-		{
-			get
-			{
-				return this._U_Fname;
-			}
-			set
-			{
-				if ((this._U_Fname != value))
-				{
-					this.OnU_FnameChanging(value);
-					this.SendPropertyChanging();
-					this._U_Fname = value;
-					this.SendPropertyChanged("U_Fname");
-					this.OnU_FnameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_Lname", DbType="NVarChar(200)")]
-		public string U_Lname
-		{
-			get
-			{
-				return this._U_Lname;
-			}
-			set
-			{
-				if ((this._U_Lname != value))
-				{
-					this.OnU_LnameChanging(value);
-					this.SendPropertyChanging();
-					this._U_Lname = value;
-					this.SendPropertyChanged("U_Lname");
-					this.OnU_LnameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_email", DbType="NVarChar(200) NOT NULL", CanBeNull=false)]
-		public string U_email
-		{
-			get
-			{
-				return this._U_email;
-			}
-			set
-			{
-				if ((this._U_email != value))
-				{
-					this.OnU_emailChanging(value);
-					this.SendPropertyChanging();
-					this._U_email = value;
-					this.SendPropertyChanged("U_email");
-					this.OnU_emailChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_status", DbType="NVarChar(10) NOT NULL", CanBeNull=false)]
-		public string U_status
-		{
-			get
-			{
-				return this._U_status;
-			}
-			set
-			{
-				if ((this._U_status != value))
-				{
-					this.OnU_statusChanging(value);
-					this.SendPropertyChanging();
-					this._U_status = value;
-					this.SendPropertyChanged("U_status");
-					this.OnU_statusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_add", DbType="NVarChar(200)")]
-		public string U_add
-		{
-			get
-			{
-				return this._U_add;
-			}
-			set
-			{
-				if ((this._U_add != value))
-				{
-					this.OnU_addChanging(value);
-					this.SendPropertyChanging();
-					this._U_add = value;
-					this.SendPropertyChanged("U_add");
-					this.OnU_addChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_name", DbType="NVarChar(200)")]
-		public string U_name
-		{
-			get
-			{
-				return this._U_name;
-			}
-			set
-			{
-				if ((this._U_name != value))
-				{
-					this.OnU_nameChanging(value);
-					this.SendPropertyChanging();
-					this._U_name = value;
-					this.SendPropertyChanged("U_name");
-					this.OnU_nameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_contact", DbType="NVarChar(15)")]
-		public string U_contact
-		{
-			get
-			{
-				return this._U_contact;
-			}
-			set
-			{
-				if ((this._U_contact != value))
-				{
-					this.OnU_contactChanging(value);
-					this.SendPropertyChanging();
-					this._U_contact = value;
-					this.SendPropertyChanged("U_contact");
-					this.OnU_contactChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_created", DbType="DateTime")]
-		public System.Nullable<System.DateTime> U_created
-		{
-			get
-			{
-				return this._U_created;
-			}
-			set
-			{
-				if ((this._U_created != value))
-				{
-					this.OnU_createdChanging(value);
-					this.SendPropertyChanging();
-					this._U_created = value;
-					this.SendPropertyChanged("U_created");
-					this.OnU_createdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_U_pass", DbType="NVarChar(200)")]
-		public string U_pass
-		{
-			get
-			{
-				return this._U_pass;
-			}
-			set
-			{
-				if ((this._U_pass != value))
-				{
-					this.OnU_passChanging(value);
-					this.SendPropertyChanging();
-					this._U_pass = value;
-					this.SendPropertyChanged("U_pass");
-					this.OnU_passChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Cart", Storage="_Carts", ThisKey="U_id", OtherKey="CAR_UID")]
-		public EntitySet<Cart> Carts
-		{
-			get
-			{
-				return this._Carts;
-			}
-			set
-			{
-				this._Carts.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Carts(Cart entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = this;
-		}
-		
-		private void detach_Carts(Cart entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = null;
 		}
 	}
 }

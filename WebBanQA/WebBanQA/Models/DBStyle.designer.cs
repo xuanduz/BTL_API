@@ -36,7 +36,7 @@ namespace WebBanQA.Models
     #endregion
 		
 		public DBStyleDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["QLCuaHangBanQAConnectionString"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["QLCuaHangBanQAConnectionString2"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
